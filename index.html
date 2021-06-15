@@ -1,0 +1,484 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Physics Experements</title>
+
+
+ <script src="babylon.js"></script>  
+ <script src="babylon.objFileLoader.js"></script>  
+  <script src="cannon.js"></script> 
+ 
+    <style>
+    html, body {
+        overflow: hidden;
+        width   : 100%;
+        height  : 100%;
+        margin  : 0;
+        padding : 0;
+    }
+
+    #renderCanvas {
+        width   : 100%;
+        height  : 100%;
+        touch-action: none;
+    }
+</style>
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+
+    window.addEventListener('DOMContentLoaded', function() {
+        var canvas = document.getElementById('renderCanvas');
+		var engine = new BABYLON.Engine(canvas, true);
+	Stage = function(scene){
+		this.scene = scene;
+		this.level = Stage.Stages['Test'];
+		this._buildLevel();
+	};
+	
+	Stage.prototype._buildLevel = function(){
+	
+	for(var i = 0; i < Object.keys(this.level.objects).length; i++){
+						var obj = Object.keys(this.level.objects)[i];
+							obj = this.level.objects[obj];
+							
+							obj.MESH = BABYLON.Mesh.ExtrudeShape("stage_shape", obj.shape, obj.path, 1, 0, BABYLON.Mesh.CAP_ALL, this.scene, false, BABYLON.Mesh.DOUBLESIDE)
+							//obj.MESH = BABYLON.Mesh.ExtrudeShapeCustom("stage_shape", obj.shape, obj.path, obj.scale, obj.rotation, false, false, 3, this.scene);
+							obj.MESH.material = new BABYLON.StandardMaterial("stage_mat", this.scene);
+							obj.MESH.diffuseColor = new BABYLON.Color3(obj.color.r,obj.color.g,obj.color.b);
+							obj.MESH.material.backFaceCulling = false;
+							obj.MESH.position.x += obj.offset.x;
+							obj.MESH.position.y += obj.offset.y;
+							obj.MESH.position.z += obj.offset.z;							
+							
+							obj.MESH.body = obj.MESH.setPhysicsState(BABYLON.PhysicsEngine.MeshImpostor , { mass: 0, friction: obj.friction, restitution: obj.restitution });
+	}
+	
+	}
+	
+	
+	Stage.Stages = {
+		Test : {
+			objects : {
+				startPad:{
+					shape : [new BABYLON.Vector3(3,3,0),new BABYLON.Vector3(3,-3,0),new BABYLON.Vector3(-3,-3,0),new BABYLON.Vector3(-3,3,0),new BABYLON.Vector3(3,3,0)],
+					path : [new BABYLON.Vector3(0,0,0),new BABYLON.Vector3(0,1,0)],	
+					offset : {x:0,y:-1,z:0},
+					scale : function() {
+						var scale = 1;
+						return scale;
+						},
+					rotation : function() {
+						return 0;
+						},		
+					color : {r:0.6,g:0.7,b:0.6},
+					friction : 0.6,
+					restitution : 0.5
+				},
+				section1:{
+					shape : [
+					new BABYLON.Vector3(-1,0.5,0),
+					new BABYLON.Vector3(1,0.5,0),
+					new BABYLON.Vector3(1,0,0),
+					new BABYLON.Vector3(-1,0,0),
+					new BABYLON.Vector3(-1,0.5,0)],
+					path : [new BABYLON.Vector3(0,0,0),new BABYLON.Vector3(0,0,-4), new BABYLON.Vector3(0,-2,-6), new BABYLON.Vector3(0,-2,-8),new BABYLON.Vector3(0,0,-12)],	
+					offset : {x:0,y:-0.5,z:-3},
+					scale : function() {
+						var scale = 1;
+						return scale;
+						},
+					rotation : function() {
+						return 0;
+						},		
+					color : {r:0.6,g:0.7,b:0.6},
+					friction : 0.6,
+					restitution : 0.5
+				},
+
+				section2:{
+					shape : [
+					new BABYLON.Vector3(-1,0.5,0),
+					new BABYLON.Vector3(1,0.5,0),
+					new BABYLON.Vector3(1,0,0),
+					new BABYLON.Vector3(-1,0,0),
+					new BABYLON.Vector3(-1,0.5,0)],
+					path : [new BABYLON.Vector3(0,0,0),new BABYLON.Vector3(0,0,-4), new BABYLON.Vector3(0,-2,-6), new BABYLON.Vector3(0,-4,-20)],	
+					offset : {x:0,y:-0.5,z:-15},
+					scale : function() {
+						var scale = 1;
+						return scale;
+						},
+					rotation : function() {
+						return 0;
+						},		
+					color : {r:0.6,g:0.7,b:0.6},
+					friction : 0.6,
+					restitution : 0.5
+				},
+
+				section3:{
+					shape : [
+					new BABYLON.Vector3(-1,0.5,0),
+					new BABYLON.Vector3(1,0.5,0),
+					new BABYLON.Vector3(1,0,0),
+					new BABYLON.Vector3(-1,0,0),
+					new BABYLON.Vector3(-1,0.5,0)],
+					path : [new BABYLON.Vector3(0,0,0),new BABYLON.Vector3(0,0,-4), new BABYLON.Vector3(0,-2,-6), new BABYLON.Vector3(0,-4,-30)],	
+					offset : {x:0,y:-10.5,z:-35},
+					scale : function() {
+						var scale = 1;
+						return scale;
+						},
+					rotation : function() {
+						return 0;
+						},		
+					color : {r:0.6,g:0.7,b:0.6},
+					friction : 0.6,
+					restitution : 0.5
+				},
+
+				section4:{
+					shape : [
+					new BABYLON.Vector3(-1,0.5,0),
+					new BABYLON.Vector3(1,0.5,0),
+					new BABYLON.Vector3(1,0,0),
+					new BABYLON.Vector3(-1,0,0),
+					new BABYLON.Vector3(-1,0.5,0)],
+					path : [new BABYLON.Vector3(0,0,0),new BABYLON.Vector3(0,0,-4), new BABYLON.Vector3(0,-2,-6), new BABYLON.Vector3(0,-4,20)],	
+					offset : {x:0,y:-40.5,z:-85},
+					scale : function() {
+						var scale = 1;
+						return scale;
+						},
+					rotation : function() {
+						return 0;
+						},		
+					color : {r:0.6,g:0.7,b:0.6},
+					friction : 0.6,
+					restitution : 0.5
+				},
+
+				section5:{
+					shape : [
+					new BABYLON.Vector3(-1,0.5,0),
+					new BABYLON.Vector3(1,0.5,0),
+					new BABYLON.Vector3(1,0,0),
+					new BABYLON.Vector3(-1,0,0),
+					new BABYLON.Vector3(-1,0.5,0)],
+					path : [new BABYLON.Vector3(0,5,0),new BABYLON.Vector3(0,0,-4), new BABYLON.Vector3(0,-2,-6), new BABYLON.Vector3(0,0,0)],	
+					offset : {x:0,y:-50.5,z:-55},
+					scale : function() {
+						var scale = 1;
+						return scale;
+						},
+					rotation : function() {
+						return 0;
+						},		
+					color : {r:0.6,g:0.7,b:0.6},
+					friction : 0.6,
+					restitution : 0.5
+				},
+
+				section6:{
+					shape : [
+					new BABYLON.Vector3(-6,0.5,0),
+					new BABYLON.Vector3(1,0.5,0),
+					new BABYLON.Vector3(1,0,0),
+					new BABYLON.Vector3(-1,0,0),
+					new BABYLON.Vector3(-6,0.5,0)],
+					path : [new BABYLON.Vector3(0,0,0),new BABYLON.Vector3(0,0,0), new BABYLON.Vector3(0,2,6), new BABYLON.Vector3(0,4,30)],	
+					offset : {x:2.5,y:-60.5,z:-75},
+					scale : function() {
+						var scale = 1;
+						return scale;
+						},
+					rotation : function() {
+						return 0;
+						},		
+					color : {r:0.6,g:0.7,b:0.6},
+					friction : 0.6,
+					restitution : 0.5
+				},
+
+				section7:{
+					shape : [
+					new BABYLON.Vector3(-6,0.5,0),
+					new BABYLON.Vector3(1,0.5,0),
+					new BABYLON.Vector3(1,0,0),
+					new BABYLON.Vector3(-1,0,0),
+					new BABYLON.Vector3(-6,0.5,0)],
+					path : [new BABYLON.Vector3(0,0,0), new BABYLON.Vector3(0,-4,30)],	
+					offset : {x:2.5,y:-60.5,z:-75},
+					scale : function() {
+						var scale = 1;
+						return scale;
+						},
+					rotation : function() {
+						return 0;
+						},		
+					color : {r:0.6,g:0.7,b:0.6},
+					friction : 0.6,
+					restitution : 0.5
+				},
+
+				section8:{
+					shape : [
+					new BABYLON.Vector3(-6,0.5,0),
+					new BABYLON.Vector3(1,0.5,0),
+					new BABYLON.Vector3(1,0,0),
+					new BABYLON.Vector3(-1,0,0),
+					new BABYLON.Vector3(-6,0.5,0)],
+					path : [new BABYLON.Vector3(0,0,0),new BABYLON.Vector3(0,0,-4), new BABYLON.Vector3(0,-2,-6), new BABYLON.Vector3(0,-4,10)],	
+					offset : {x:2.5,y:-70.5,z:-85},
+					scale : function() {
+						var scale = 1;
+						return scale;
+						},
+					rotation : function() {
+						return 0;
+						},		
+					color : {r:0.6,g:0.7,b:0.6},
+					friction : 0.6,
+					restitution : 0.5
+				},
+
+				
+
+				section9:{
+					shape : [
+					new BABYLON.Vector3(-10,10.5,0),
+					new BABYLON.Vector3(10,10.5,0),
+					new BABYLON.Vector3(10,0,0),
+					new BABYLON.Vector3(-10,0,0),
+					new BABYLON.Vector3(-10,10.5,0)],
+					path : [new BABYLON.Vector3(0,10,0),new BABYLON.Vector3(0,0,-4), new BABYLON.Vector3(0,-2,-6), new BABYLON.Vector3(0,-4,-10)],	
+					offset : {x:0,y:-70.5,z:-75},
+					scale : function() {
+						var scale = 1;
+						return scale;
+						},
+					rotation : function() {
+						return 0;
+						},		
+					color : {r:0.6,g:0.7,b:0.6},
+					friction : 0.6,
+					restitution : 0.5
+				},
+				
+			}
+
+			
+			
+			
+		}
+	};
+	
+	
+var createScene = function() {
+
+/* CGII AF - Goldenberg Machine       **
+** Cainã Antunes Silva RA 160831      **
+** Felipe Martins de Almeida RA171703 */
+
+    // create a basic BJS Scene object
+    var scene = new BABYLON.Scene(engine);
+
+	var gravity = new BABYLON.Vector3(0, -1.8, 0);
+	scene.enablePhysics(gravity, new BABYLON.CannonJSPlugin());
+	scene.collisionsEnabled = true;
+	scene.workerCollisions = true;
+
+	var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 0.5, 0), scene);
+  light.intensity = 0.7;
+	
+	
+
+    var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 15, 45), scene);
+    
+	camera.radius = 15; // how far from the object to follow
+	camera.heightOffset = 6; // how high above the object to place the camera
+	camera.rotationOffset = 0; // the viewing angle
+	camera.cameraAcceleration = 0.05 // how fast to move
+	camera.maxCameraSpeed = 20 // speed limit
+	
+	camera.spinAccel = 1;
+	
+
+	//Skybox
+    const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:500}, scene);
+	const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+	skyboxMaterial.backFaceCulling = false;
+	skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/skybox", scene);
+	skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+	skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+	skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+	skybox.material = skyboxMaterial;
+
+		var sphere = BABYLON.Mesh.CreateSphere("Sphere", 160, 1, scene);
+		var insideSphere = BABYLON.Mesh.CreateSphere("inside_Sphere", 16, 0.5, scene);
+		var mat1 = new BABYLON.StandardMaterial("mat1", scene);
+		mat1.diffuseTexture = new BABYLON.Texture("textures/sun.jpg", scene);
+		
+		sphere.material = mat1;
+		//sphere.material.alpha = 0.3;
+    
+       sphere.position = new BABYLON.Vector3(0, 3, 0);
+	   insideSphere.position = sphere.position;
+
+		sphere.setPhysicsState(BABYLON.PhysicsEngine.SphereImpostor, {move:true, mass: 6, friction: 0.4, restitution: 0.2 });
+		sphere.refreshBoundingInfo();
+		
+	camera.target = insideSphere;
+	insideSphere.isVisible = false;
+
+	scene.activeCamera = camera;
+	 var keys = {}
+	 keys.up = false, keys.down = false, keys.left = false, keys.right = false;
+	function onKeyDown(evt) {
+    switch (evt.keyCode){
+		case 37: // left
+		keys.left = true;
+		break;
+		case 39: //right
+		keys.right = true;
+		break;
+		case 38: //up
+		keys.up = true;
+		break;
+		case 40: //down
+		keys.down = true;
+		break;	
+	}
+	}
+		function onKeyUp(evt) {
+    switch (evt.keyCode){
+		case 37: // left
+		keys.left = false;
+		break;
+		case 39: //right
+		keys.right = false;
+		break;
+		case 38: //up
+		keys.up = false;
+		break;
+		case 40: //down
+		keys.down = false;
+		break;	
+	}
+	}
+	
+	window.addEventListener("keydown", onKeyDown);
+	window.addEventListener("keyup", onKeyUp);
+	
+	var music = new BABYLON.Sound("Sons", "sounds/musica.mp3", scene, 
+			function() {
+				
+				music.play();
+			}
+	);
+	
+
+
+	scene.registerBeforeRender(function(){
+		insideSphere.position = sphere.position;
+		
+		var forward = scene.activeCamera.position.subtract(sphere.position).normalize();
+		forward.y = 0;
+		
+		if(keys.up){
+			sphere.applyImpulse(forward.scale(-1), sphere.position);
+		}else if(keys.down){
+			sphere.applyImpulse(forward.scale(1), sphere.position);
+		}
+		
+		if(keys.left){
+			camera.spinAccel += 0.1;
+			camera.rotationOffset -= camera.spinAccel;	
+		}else if(keys.right){
+			camera.spinAccel += 0.1;
+			camera.rotationOffset += camera.spinAccel;			
+		}
+		
+		if(!keys.left && !keys.right){camera.spinAccel = 1}
+			
+	});
+
+	var newStage = new Stage(scene);
+	
+	// Create a particle system
+	var particleSystem = new BABYLON.ParticleSystem("particles", 5000, scene);
+
+	//Texture of each particle
+	particleSystem.particleTexture = new BABYLON.Texture("./flare.png", scene);
+
+	// Where the particles come from
+	particleSystem.emitter = sphere.position; // the starting object, the emitter
+	particleSystem.minEmitBox = new BABYLON.Vector3(-0.5, 0, 0); // Starting all from
+	particleSystem.maxEmitBox = new BABYLON.Vector3(0.5, 0, 0); // To...
+
+	// Colors of all particles
+	particleSystem.color1 = new BABYLON.Color4(1.0, 1.0, 0.5, 1.0);
+	particleSystem.color2 = new BABYLON.Color4(1.0 , 0.5, 0.5, 1.0);
+	particleSystem.colorDead = new BABYLON.Color4(0.2, 0, 0, 0.0);
+
+	// Size of each particle (random between...
+	particleSystem.minSize = 0.01;
+	particleSystem.maxSize = 0.1;
+
+	// Life time of each particle (random between...
+	particleSystem.minLifeTime = 0.5;
+	particleSystem.maxLifeTime = 1.5;
+
+	// Emission rate
+	particleSystem.emitRate = 1500;
+
+	// Blend mode : BLENDMODE_ONEONE, or BLENDMODE_STANDARD
+	particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+
+	// Set the gravity of all particles
+	particleSystem.gravity = new BABYLON.Vector3(0, 5, 9);
+
+	// Direction of each particle after it has been emitted
+	particleSystem.direction1 = new BABYLON.Vector3(-1, 0, 1);
+	particleSystem.direction2 = new BABYLON.Vector3(1, 0, -1);
+
+	// Angular speed, in radians
+	particleSystem.minAngularSpeed = 10;
+	particleSystem.maxAngularSpeed = Math.PI;
+
+	// Speed
+	particleSystem.minEmitPower = 3;
+	particleSystem.maxEmitPower = 5;
+	particleSystem.updateSpeed = 0.01;
+
+	// Start the particle system
+	particleSystem.start();
+
+
+    // return the created scene
+    return scene;
+}
+
+var scene = createScene();
+
+engine.runRenderLoop(function() {
+    scene.render();
+});
+
+
+//ALWAYS LISTEN FOR RESIZE!
+window.addEventListener('resize', function() {
+    engine.resize();
+});
+
+    });
+	
+
+</script>
+    
+</body>
+</html>
+
